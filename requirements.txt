@@ -1,0 +1,4 @@
+pypiwin32==223
+WMI==1.4.9
+python-can==3.3.2
+pytest==5.4.1
