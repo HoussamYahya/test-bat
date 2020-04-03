@@ -85,6 +85,15 @@ class virtualBench:
         self.ps_disable()
         self.ps_enable()
 
+    def ps_get_current_consumption(self, output):
+        """
+        Read the power used by the output
+        :param output: voltage output to be configured (PS_6V, PS_25V_POS or PS_25V_NEG)
+        :return: Current used on the output
+        """
+        _, current, _ = self.ps.read_output(output)
+        return current
+
 
 
 

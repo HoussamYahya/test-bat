@@ -1,2 +1,6 @@
 
 venv/
+
+Libs/__pycache__/
+
+SSVT_FAW/__pycache__/

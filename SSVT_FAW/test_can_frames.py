@@ -44,6 +44,7 @@ class Test_can_periods:
         self.__set_voltages(virtual_bench, 11.0)
         virtual_bench.ps_generate_por()
         time.sleep(70)
+        can_interface.reset()
         self.__set_voltages(virtual_bench, 14.0)
         rx_stats = can_interface.get_period(frame_id, FRAME_COUNT_TO_GET, extended=True, timeout=FRAME_COUNT_TO_GET*expected_period)
         self.__check_periods(rx_stats, expected_period)
