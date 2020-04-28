@@ -2,6 +2,8 @@ import can
 import time
 from statistics import mean, pstdev
 import asyncio
+import sys
+sys.path.append('d:\\Projects\\PythonTestBench\\Libs\\Peak')
 
 CAN_INTERFACE_PEAK = 'pcan'
 
