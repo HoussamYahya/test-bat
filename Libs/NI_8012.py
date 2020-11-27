@@ -1,5 +1,5 @@
 import sys
-sys.path.append('d:\\Projects\\PythonTestBench\\Libs')
+#sys.path.append('d:\\Projects\\PythonTestBench\\Libs')
 import wmi  # To be able to detect USB connected devices
 from pyvirtualbench import PyVirtualBench
 import time
