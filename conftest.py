@@ -1,3 +1,5 @@
+import sys
+sys.path.append('C:\\Projets\\Volvo\\Bootloader\\pythontestbench\\Libs')
 import Libs.NI_8012 as NI_8012
 import Libs.canStatistics as cs
 from pytest import fixture
