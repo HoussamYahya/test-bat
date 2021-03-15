@@ -5,18 +5,18 @@ import subprocess
 from subprocess import Popen, PIPE, STDOUT
 
 NI_VIRTUAL_BENCH_NAME = "VB8012-31A1DBE"
-path = "C:\\software\\AutomotiveCommon\\bootconsole\\dll_bootloader\\x64\\Debug\\"
+path = "tools\\Bootconsole\\"
 program = "BootConsole.exe"
 argument2 = "0"
 argument3 = "G16001C-Volvo-Application.sx"
 
 
-@mark.download_app_cal
+@mark.download_app_cal_smoke
 class TestDownload:
-    @mark.parametrize("index",        range(1))
+    @mark.parametrize("index", range(1))
     def test_download_application(self, virtual_bench, index):
         """
-        Validate the periods of the CAN frames after reset of the sensor
+        Test the software downloadand default calibration via BootConsole application
         :param virtual_bench: fixture of pytest to use the NI virtual bench
         :param index: number of repetition
         :return:
@@ -24,19 +24,7 @@ class TestDownload:
         self.__set_voltages(virtual_bench, 12.0)
         virtual_bench.ps_generate_por()
         time.sleep(5)
-        result = self.execute_bootconsole_download()
-        print(result)
-        # if result != "'Download Success'":
-        #     print(1)
-        #     assert (False, "Download application fail")
-        self.__set_voltages(virtual_bench, 12.0)
-        virtual_bench.ps_generate_por()
-        time.sleep(5)
-        result = self.execute_bootconsole_calibration()
-        print(result)
-        # if result != "'Download Success'":
-        #     print(2)
-        #     assert (False, "Download calibration fail")
+        result = self.execute_bootconsole_download_app()
         assert(result == "'Download Success'")
 
     @staticmethod
@@ -51,8 +39,8 @@ class TestDownload:
         virtual_bench.ps_configure_output(NI_8012.PS_25V_NEG, -voltage, 0.2)
 
     @staticmethod
-    def execute_bootconsole_download():
-        result = subprocess.run([path + program, "dl", argument2, path + "G16001C-Volvo-Application.sx"]
+    def execute_bootconsole_download_app():
+        result = subprocess.run([path + program, "dl", argument2, path + argument3]
                                 , stdout=PIPE, stderr=STDOUT, shell=True)
         to_print = result.stdout.splitlines()
         return str(to_print[-1]).replace('b', '')
