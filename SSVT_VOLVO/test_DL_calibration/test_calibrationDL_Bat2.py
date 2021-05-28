@@ -12,14 +12,11 @@ argument2 = "0"
 argument3_1 = "G16001C-Volvo-Application_BWC1.sx"
 argument3_2 = "G16001C-Volvo-Application_BWC2.sx"
 argument3 = argument3_1
-argument4 = "0 0 0 0x1B"
+argument4 = "0"
+argument5 = "0"
+argument6 = "0"
+argument7 = "0x1B"
 
-def print_function_name(f):
-    @wraps(f)
-    def wrapper(*arg, **kwargs):
-        print("--- "+" ".join(f.__name__.upper().split("_")) + " ---")
-        return f(*arg, **kwargs)
-    return wrapper
 
 
 @mark.download_cal_bat2_smoke
@@ -51,7 +48,6 @@ class TestDownload:
             assert (False, "BWC Calibration Download application fail")
 
     @staticmethod
-    @print_function_name
     def __set_voltages(virtual_bench, voltage):
         """
         Set both power supply voltages to the same value
@@ -68,9 +64,12 @@ class TestDownload:
             argument3 = argument3_1
         elif sel_cal == 2:
             argument3 = argument3_2
-        result = subprocess.run([path + program, "calib", argument2, path + argument3, argument4]
+
+        print("    test        ", path + program, "calib", argument2, path + argument3, argument4)
+        result = subprocess.run([path + program, "calib", argument2, path + argument3, argument4, argument5, argument6, argument7]
                                 , stdout=PIPE, stderr=STDOUT, shell=True)
         to_print = result.stdout.splitlines()
+        print("to_print   ", to_print)
         return str(to_print[-1]).replace('b', '')
 
     @staticmethod
