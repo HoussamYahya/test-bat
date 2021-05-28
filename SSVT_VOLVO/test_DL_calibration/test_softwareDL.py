@@ -5,10 +5,12 @@ import subprocess
 from subprocess import Popen, PIPE, STDOUT
 
 NI_VIRTUAL_BENCH_NAME = "VB8012-31A1DBE"
-path = "tools\\Bootconsole\\"
+path = "..\\..\\tools\\Bootconsole\\"
+#path="C:\\Projet\\Volvo\\PythonTest_Volvo\\pythontestbench\\tools\\Bootconsole\\"
 program = "BootConsole.exe"
 argument2 = "0"
 argument3 = "G16001C-Volvo-Application.sx"
+argument4 = "0x1B" #from R7.0 for BAT3 sensor
 
 
 @mark.download_app_cal_smoke
@@ -16,7 +18,7 @@ class TestDownload:
     @mark.parametrize("index", range(1))
     def test_download_application(self, virtual_bench, index):
         """
-        Test the software downloadand default calibration via BootConsole application
+        Test the software download and default calibration via BootConsole application
         :param virtual_bench: fixture of pytest to use the NI virtual bench
         :param index: number of repetition
         :return:
@@ -41,6 +43,7 @@ class TestDownload:
     @staticmethod
     def execute_bootconsole_download_app():
         result = subprocess.run([path + program, "dl", argument2, path + argument3]
+        result = subprocess.run([path + program, "dl", argument2, path + argument3, argument4]
                                 , stdout=PIPE, stderr=STDOUT, shell=True)
         to_print = result.stdout.splitlines()
         return str(to_print[-1]).replace('b', '')

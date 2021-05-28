@@ -6,13 +6,13 @@ from subprocess import Popen, PIPE, STDOUT
 from functools import wraps
 
 NI_VIRTUAL_BENCH_NAME = "VB8012-31A1DBE"
-path = "tools\\Bootconsole\\"
+path = "..\\..\\tools\\Bootconsole\\"
 program = "BootConsole.exe"
 argument2 = "0"
 argument3_1 = "G16001C-Volvo-Application_BWC1.sx"
 argument3_2 = "G16001C-Volvo-Application_BWC2.sx"
 argument3 = argument3_1
-argument4 = "0"
+argument4 = "0 0 0 0x1B"
 
 def print_function_name(f):
     @wraps(f)
@@ -46,9 +46,9 @@ class TestDownload:
         # time.sleep(2)
         result = self.execute_bootconsole_bwc_calibration(sel_cal)
         assert (result == "'Download Success'")
-        # if result != "'Download Success'":
-        #     print(1)
-        #     assert (False, "BWC Calibration Download application fail")
+        if result != "'Download Success'":
+            print(1)
+            assert (False, "BWC Calibration Download application fail")
 
     @staticmethod
     @print_function_name
