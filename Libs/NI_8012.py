@@ -1,12 +1,14 @@
 import sys
-#sys.path.append('d:\\Projects\\PythonTestBench\\Libs')
+sys.path.append('d:\\Projects\\PythonTestBench\\Libs')
 import wmi  # To be able to detect USB connected devices
-from pyvirtualbench import PyVirtualBench
+from Libs.pyvirtualbench import PyVirtualBench
 import time
 
 PS_6V = "ps/+6V"
 PS_25V_POS = "ps/+25V"
 PS_25V_NEG = "ps/-25V"
+Fgen_DC_offset = 0
+Fgen_DC_mode = 3 # DC wave
 
 
 class virtualBench:
@@ -29,6 +31,8 @@ class virtualBench:
                 self.vb = PyVirtualBench(self.name)
                 self.ps = self.vb.acquire_power_supply()
                 self.mso = self.vb.acquire_mixed_signal_oscilloscope()
+                self.fgen = self.vb.acquire_function_generator()
+                self.dig_io = self.vb.acquire_digital_input_output(self.name+'/dig/0:7')
                 break
         # Configure the resources
         if self.name is not None:
@@ -50,6 +54,10 @@ class virtualBench:
             self.mso.release()
         if self.vb is not None:
             self.vb.release()
+        if self.fgen is not None:
+            self.fgen.release()
+        if self.dig_io is not None:
+            self.dig_io.release()
 
     def ps_configure_output(self, output, voltage, current_limit):
         """
@@ -83,6 +91,7 @@ class virtualBench:
         :return:
         """
         self.ps_disable()
+        time.sleep(0.2)
         self.ps_enable()
 
     def ps_get_current_consumption(self, output):
@@ -94,6 +103,42 @@ class virtualBench:
         _, current, _ = self.ps.read_output(output)
         return current
 
+    def fgen_run(self):
+        """
+        set the function generator ON
+        :return:
+        """
+        self.fgen.run()
+
+    def fgen_stop(self):
+        """
+        set the function generator ON
+        :return:
+        """
+        self.fgen.stop()
+
+    def fgen_dc_select(self):
+        """
+        Select the DC wave with zero offet
+        :return:
+        """
+        self.fgen.configure_standard_waveform(Fgen_DC_mode, 0, Fgen_DC_offset, 1, 0)
+
+    def fgen_set_dc_value(self, dc_offset):
+        """
+        set the offset of DC generator
+        :return:
+        """
+        self.fgen.configure_standard_waveform(Fgen_DC_mode,  0, dc_offset, 1, 0)
+
+    def digital_set_line_output(self,line, state):
+        """
+            set digital line to 3.3 volt or GND
+            ie => set line 7 ( wake up line ) to 3.3V
+            line = 'dig/7'
+            state = {True}
+        """
+        self.dig_io.write(line,state)
 
 
 

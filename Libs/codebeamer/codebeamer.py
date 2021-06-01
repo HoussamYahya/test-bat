@@ -7,7 +7,6 @@
 
 import requests
 import json
-from conftest import *
 cb_rest_url           = "https://lem.codebeamer.com/rest"
 auth_account          = 'Jenkins'
 auth_password         = 'PassJenkins'

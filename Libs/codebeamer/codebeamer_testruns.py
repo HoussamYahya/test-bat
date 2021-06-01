@@ -1,6 +1,5 @@
 # LEM copyright 2020, All rights reserved. For internal use only
-
-from Libs.codebeamer.codebeamer import http_get, http_post
+from Libs.codebeamer.codebeamer import *
 from bs4 import BeautifulSoup
 from conftest import *
 import pytest
@@ -82,7 +81,10 @@ def cb_TRun():
         else:
             ret_test_pos = 0
             ret_test_neg = 1
-        list_TC.append({'TC name': str(TC_Name.contents[0]),'CB_URI' : str(CB_URI.contents[0]), "Passed": ret_test_pos, 'Failed' : ret_test_neg, 'TS': "MAN_SCANIA NON REGRESSION", 'duration': float(TC_DURATION.contents[0])})
+        list_TC.append({'TC name': str(TC_Name.contents[0]),'CB_URI' : str(CB_URI.contents[0]), "Passed": ret_test_pos, 'Failed' : ret_test_neg, 'TS': "VOVLO NON REGRESSION", 'duration': float(TC_DURATION.contents[0])})
     print(list_TC)
     current_date = datetime.now().strftime("%Y%m%d_%H%M%S")
     main_cb_testruns(list_TC, subject=f"Test RUN after Non Regression execution", current_date=current_date, link_to_zip_file="Not available")
+
+if __name__ == '__main__':
+    cb_TRun()
