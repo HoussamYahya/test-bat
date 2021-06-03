@@ -3,6 +3,8 @@ from pytest import mark
 import time
 import subprocess
 from subprocess import Popen, PIPE, STDOUT
+import os
+from testbenchselect import *
 
 NI_VIRTUAL_BENCH_NAME = "VB8012-31A1DBE"
 path = "..\\..\\tools\\Bootconsole\\"
@@ -16,17 +18,37 @@ argument4 = "0x1B" #from R7.0 for BAT3 sensor
 @mark.download_app_cal_smoke
 class TestDownload:
     @mark.parametrize("index", range(1))
-    def test_download_application(self, virtual_bench, index):
+    def test_download_application_bat2(self, virtual_bench, index):
         """
         Test the software download and default calibration via BootConsole application
         :param virtual_bench: fixture of pytest to use the NI virtual bench
         :param index: number of repetition
         :return:
         """
+        volvo_BAT2_testbench(virtual_bench)
         self.__set_voltages(virtual_bench, 12.0)
         virtual_bench.ps_generate_por()
         time.sleep(5)
         result = self.execute_bootconsole_download_app()
+        assert(result == "'Download Success'")
+
+    @mark.parametrize(
+        ("cal_part", "lin_node_address"), [
+            ("G16001C-Volvo-Application", "0x46"),
+            ("G16001C-Volvo-Application", "0x47"),
+        ])
+    def test_download_application_bat3(self, virtual_bench, cal_part, lin_node_address):
+        """
+        Test the software download and default calibration via BootConsole application
+        :param virtual_bench: fixture of pytest to use the NI virtual bench
+        :param index: number of repetition
+        :return:
+        """
+        volvo_BAT3_testbench(virtual_bench)
+        self.__set_voltages(virtual_bench, 12.0)
+        virtual_bench.ps_generate_por()
+        time.sleep(5)
+        result = self.execute_bootconsole_download_app(lin_node_address)
         assert(result == "'Download Success'")
 
     @staticmethod
@@ -41,11 +63,12 @@ class TestDownload:
         virtual_bench.ps_configure_output(NI_8012.PS_25V_NEG, -voltage, 0.2)
 
     @staticmethod
-    def execute_bootconsole_download_app():
-        result = subprocess.run([path + program, "dl", argument2, path + argument3]
-        result = subprocess.run([path + program, "dl", argument2, path + argument3, argument4]
+    def execute_bootconsole_download_app(linadress = argument4):
+        print("location =", path + program, "dl", argument2, path + argument3, argument4)
+        result = subprocess.run([path + program, "dl", argument2, path + argument3, linadress]
                                 , stdout=PIPE, stderr=STDOUT, shell=True)
         to_print = result.stdout.splitlines()
+        print("to_print  ", to_print)
         return str(to_print[-1]).replace('b', '')
 
     @staticmethod

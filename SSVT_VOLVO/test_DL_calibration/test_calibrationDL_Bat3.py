@@ -19,25 +19,24 @@ argument5 = "0"
 argument6 = "0"
 argument7 = "0x1B"
 
-
-
-@mark.download_cal_bat2_smoke
+@mark.download_cal_bat3_smoke
 class TestDownload:
-    @mark.parametrize("index", range(2))
-    def test_download_calibration_bat2(self, virtual_bench, index, request):
+    @mark.parametrize(
+        ("cal_part", "lin_node_address"), [
+        ("G16001C-Volvo-Application_BWC1.sx", "0x46"),
+        ("G16001C-Volvo-Application_BWC1.sx", "0x47"),
+        ("G16001C-Volvo-Application_BWC2.sx", "0x46"),
+        ("G16001C-Volvo-Application_BWC2.sx", "0x47"),
+    ] )
+    def test_download_calibration_bat3(self, virtual_bench, cal_part, lin_node_address, request):
         """
         Test the calibration parameter via BootConsole application
         :param virtual_bench: fixture of pytest to use the NI virtual bench
         :param index: number of repetition
         :return:
         """
-        volvo_BAT2_testbench(virtual_bench)
-        request.node._bc_tc_tracker_id = "/item/129653"
+        volvo_BAT3_testbench(virtual_bench)
         request.node._bc_tc_tracker_id = "/item/129162"
-        if ((index % 2) == 0):
-            sel_cal = 2
-        else:
-            sel_cal = 1
 
         self.__set_voltages(virtual_bench, 12.0)
         virtual_bench.ps_generate_por()
@@ -45,7 +44,7 @@ class TestDownload:
 
         self.execute_sendUncondFrame()
         # time.sleep(2)
-        result = self.execute_bootconsole_bwc_calibration(sel_cal)
+        result = self.execute_bootconsole_bwc_calibration(cal_part, lin_node_address)
         assert (result == "'Download Success'")
         if result != "'Download Success'":
             print(1)
@@ -63,17 +62,11 @@ class TestDownload:
         virtual_bench.ps_configure_output(NI_8012.PS_25V_NEG, -voltage, 0.2)
 
     @staticmethod
-    def execute_bootconsole_bwc_calibration(sel_cal):
-        if sel_cal == 1:
-            argument3 = argument3_1
-        elif sel_cal == 2:
-            argument3 = argument3_2
+    def execute_bootconsole_bwc_calibration(sel_cal, linadress):
 
-        print("    test        ", path + program, "calib", argument2, path + argument3, argument4)
-        result = subprocess.run([path + program, "calib", argument2, path + argument3, argument4, argument5, argument6, argument7]
+        result = subprocess.run([path + program, "calib", argument2, path + argument3, argument4, argument5, argument6, linadress]
                                 , stdout=PIPE, stderr=STDOUT, shell=True)
         to_print = result.stdout.splitlines()
-        print("to_print   ", to_print)
         return str(to_print[-1]).replace('b', '')
 
     @staticmethod

@@ -18,7 +18,7 @@ def virtual_bench():
     :return: virtual bench resource
     """
     vb = NI_8012.virtualBench()
-    bench_select(vb, "VOLVO")
+    #bench_select(vb, ecu)
     yield vb
     # Close the interface
     vb.ps_disable()
