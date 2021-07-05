@@ -21,8 +21,8 @@ argument7 = "0x1B"
 
 
 
-@mark.download_cal_bat2_smoke
-class TestDownload:
+@mark.CAL_DL_BAT2_smoke
+class CAL_DL_BAT2:
     @mark.parametrize("index", range(2))
     def test_download_calibration_bat2(self, virtual_bench, index, request):
         """
@@ -33,7 +33,6 @@ class TestDownload:
         """
         volvo_BAT2_testbench(virtual_bench)
         request.node._bc_tc_tracker_id = "/item/129653"
-        request.node._bc_tc_tracker_id = "/item/129162"
         if ((index % 2) == 0):
             sel_cal = 2
         else:

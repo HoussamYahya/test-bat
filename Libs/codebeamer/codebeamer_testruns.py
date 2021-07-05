@@ -6,6 +6,7 @@ import pytest
 from datetime import datetime
 import time
 
+report = "C:\\Projet\\Volvo\\PythonTest_Volvo\\report.html"
 
 MAN_tracker_test_runs = "403596"   # Tracker Test Runs
 
@@ -71,7 +72,7 @@ def main_cb_testruns(list_TC, subject, current_date, link_to_zip_file):
 def cb_TRun():
     print("start create TEST RUN")
     list_TC = []
-    f_report_html = open("report.html", "rb")
+    f_report_html = open(report, "rb")
     report_parse = BeautifulSoup(f_report_html, 'html.parser')
 
     for TC_Result, CB_URI, TC_DURATION, TC_Name in zip(report_parse.find_all('td', "col-result" ), report_parse.find_all('td', "col_uri"), report_parse.find_all('td', "col-duration"), report_parse.find_all('td', "col-name" )):
