@@ -8,7 +8,8 @@ from pytest_html import extras
 from testbenchselect import *
 
 NI_VIRTUAL_BENCH_NAME = "VB8012-31A1DBE"
-path = "..\\..\\tools\\Bootconsole\\"
+#path = "..\\..\\tools\\Bootconsole\\"
+path="C:\\Users\\PC_TEST\\Documents\\PythonTest_Volvo\\pythontestbench\\tools\\Bootconsole\\"
 program = "BootConsole.exe"
 argument2 = "0"
 argument3_1 = "G16001C-Volvo-Application_BWC1.sx"
@@ -22,8 +23,8 @@ argument7 = "0x1B"
 
 
 @mark.CAL_DL_BAT2_smoke
-class CAL_DL_BAT2:
-    @mark.parametrize("index", range(2))
+class TestCAL_DL_BAT2:
+    @mark.parametrize("index", range(1))
     def test_download_calibration_bat2(self, virtual_bench, index, request):
         """
         Test the calibration parameter via BootConsole application
@@ -45,11 +46,11 @@ class CAL_DL_BAT2:
         self.execute_sendUncondFrame()
         # time.sleep(2)
         result = self.execute_bootconsole_bwc_calibration(sel_cal)
+        print("result",result)
         assert (result == "'Download Success'")
         if result != "'Download Success'":
             print(1)
             assert (False, "BWC Calibration Download application fail")
-
     @staticmethod
     def __set_voltages(virtual_bench, voltage):
         """
