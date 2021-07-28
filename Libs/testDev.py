@@ -1,4 +1,4 @@
-import NI_8012
+import Libs.NI_8012 as NI_8012
 import canStatistics
 
 # Start the power supply
