@@ -4,9 +4,8 @@ import sys
 import os
 import traceback
 import time
+from Libs import PLinApi
 from ctypes import *
-
-import PLinApi
 
 
 class Lin_Peak_For_Volvo(object):
@@ -99,9 +98,12 @@ class Lin_Peak_For_Volvo(object):
     
     # Frame for Bats 2
     MasterReq_SlaveResp_Table2 = [
-        {"id": [0x38], "delay": 10, "type": PLinApi.TLIN_SLOTTYPE_UNCONDITIONAL},
-        {"id": [0x1B], "delay": 20, "type": PLinApi.TLIN_SLOTTYPE_UNCONDITIONAL},
-        {"id": [0x26], "delay": 10, "type": PLinApi.TLIN_SLOTTYPE_UNCONDITIONAL},
+        {"id": [0x1D], "delay": 20, "type": PLinApi.TLIN_SLOTTYPE_UNCONDITIONAL},
+        {"id": [0x1A], "delay": 20, "type": PLinApi.TLIN_SLOTTYPE_UNCONDITIONAL},
+        {"id": [0x18], "delay": 20, "type": PLinApi.TLIN_SLOTTYPE_UNCONDITIONAL},
+        {"id": [0x19], "delay": 20, "type": PLinApi.TLIN_SLOTTYPE_UNCONDITIONAL},
+        {"id": [0x1C], "delay": 20, "type": PLinApi.TLIN_SLOTTYPE_UNCONDITIONAL},
+        {"id": [0x2B], "delay": 20, "type": PLinApi.TLIN_SLOTTYPE_UNCONDITIONAL},
         {"id": [0x3C], "delay": 20, "type": PLinApi.TLIN_SLOTTYPE_MASTER_REQUEST},
         {"id": [0x3D], "delay": 20, "type": PLinApi.TLIN_SLOTTYPE_SLAVE_RESPONSE},
     ]
@@ -466,7 +468,7 @@ class Lin_Peak_For_Volvo(object):
                 self.linStatus = True
                 delta = ((msg.TimeStamp - msg_buffer.setdefault(msg.FrameId, msg.TimeStamp)) / 1000.0)
                 msg_buffer[msg.FrameId] = msg.TimeStamp
-                '''
+
                 if msg.Length == 1:
                     print("{} ({:>14}) : 0x{:02X} {} - {:02X} [{}]".format(
                         msg.TimeStamp, delta, msg.FrameId, msg.Length,
@@ -536,15 +538,15 @@ class Lin_Peak_For_Volvo(object):
                             msg.Data[6],
                             msg.Data[7], msg.ErrorFlags)
                     )
-                    '''
+
             else:
                 self.linStatus = False
 
             time.sleep(0.00001)
-        '''
+
         for msg in self.listMsg:
-            print('\n - ' + msg)
-        '''
+            print('\n - ', msg)
+
 
 
     def displayMenuInput(self, text="Select an action: "):
@@ -650,8 +652,10 @@ class Lin_Peak_For_Volvo(object):
 
 
 if __name__ == '__main__':
-    import threading
-
+    """
+        Check the lin communication with BAT2 and Table2
+    """
+    print("Test Lin")
     appLin_Volvo = Lin_Peak_For_Volvo()
     appLin_Volvo.connect("appLin_Volvo", 1, 1)
     time.sleep(1)
@@ -678,9 +682,14 @@ if __name__ == '__main__':
     appLin_Volvo.update_schedule_data(0x37, [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
     '''
 
-    
+    appLin_Volvo.listMsg = []
     appLin_Volvo.start_schedule_table(0)
-    appLin_Volvo.read()
+    #time.sleep(10)
+    while(1):
+       time.sleep(1)
+    appLin_Volvo.read(20)
+    for msg in appLin_Volvo.listMsg:
+        print(msg)
     '''
     appLin_Volvo.displayMenuInput("** Press <enter to stop schedule **")
     appLin_Volvo.update_schedule_data(0x3C, [0x1B, 0x02, 0x10, 0x60, 0x00, 0x00, 0x00, 0x00])
