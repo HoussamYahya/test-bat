@@ -91,7 +91,7 @@ class virtualBench:
         :return:
         """
         self.ps_disable()
-        time.sleep(0.2)
+        time.sleep(1)
         self.ps_enable()
 
     def ps_get_current_consumption(self, output):
