@@ -1,6 +1,6 @@
 import Libs.NI_8012 as NI_8012
 from pytest import mark
-import  time
+import time
 import subprocess
 from subprocess import Popen, PIPE, STDOUT
 from functools import wraps
