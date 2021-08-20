@@ -8,7 +8,7 @@ from pytest_html import extras
 from testbenchselect import *
 NI_VIRTUAL_BENCH_NAME = "VB8012-31A1DBE"
 #path = "..\\..\\tools\\Bootconsole\\"
-path="C:\\Users\\PC_TEST\\Documents\\PythonTest_Volvo\\pythontestbench\\tools\\Bootconsole\\"
+path = "C:\\Users\\PC_TEST\\Documents\\PythonTest_Volvo\\pythontestbench\\tools\\Bootconsole\\"
 program = "BootConsole.exe"
 argument2 = "0"
 argument3_1 = "G16001C-Volvo-Application_BWC1.sx"
